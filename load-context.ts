@@ -53,8 +53,6 @@ export const getLoadContext: GetLoadContext = ({ context }) => {
       },
     },
     future: {
-      v3_webhookAdminContext: true,
-      v3_authenticatePublic: true,
       unstable_newEmbeddedAuthStrategy: true,
     },
     // ...(env.SHOP_CUSTOM_DOMAIN
