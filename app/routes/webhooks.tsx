@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { topic, shop, session, admin } =
-    await context.shopify.authenticate.admin.webhook(request);
+    await context.shopify.authenticate.webhook(request);
 
   if (!admin) {
     // The admin context isn't returned if the webhook fired after a shop was uninstalled.
