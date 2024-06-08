@@ -1,0 +1,42 @@
+name: Publish to Cloudflare Pages
+on:
+  push:
+    branches:
+      - main
+      - production
+    paths:
+      - app/**
+      - functions/**
+      - public/**
+  workflow_dispatch:
+
+run-name: ${{ github.event_name == 'push' && github.event.head_commit.message || github.event_name == 'pull_request' && github.event.pull_request.title }}
+jobs:
+  deploy:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Publish to Cloudflare Pages
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy -- --branch ${{ steps.extract_branch.outputs.branch }}
