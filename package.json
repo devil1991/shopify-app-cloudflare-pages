@@ -72,5 +72,8 @@
     "vite": "^5.2.13",
     "vitest": "^1.6.0",
     "wrangler": "^3.60.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.18.0"
   }
 }
